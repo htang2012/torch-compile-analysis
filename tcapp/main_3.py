@@ -5,6 +5,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 from functorch.compile import make_boxed_func
 from torch._functorch.aot_autograd import aot_module_simplified
+from functorch.compile import aot_module
 from torchvision import datasets, transforms
 from torch.optim.lr_scheduler import StepLR
 from torch.fx.passes.graph_drawer import FxGraphDrawer
@@ -40,6 +41,11 @@ def inspect_backend_f(gm, sample_inputs):
     with open("forward.svg", "wb") as file:
         file.write(FxGraphDrawer(gm,'f').get_dot_graph().create_svg())
     return gm.forward
+
+
+def compiler_model(fx_module):
+    print(fx_module.code)
+    return fx_module
 
 
 
@@ -166,7 +172,7 @@ def main():
 
     torch.manual_seed(args.seed)
 
-    device = torch.device("cuda")
+    device = torch.device("cpu")
 
     train_kwargs = {'batch_size': args.batch_size}
     test_kwargs = {'batch_size': args.test_batch_size}
@@ -183,7 +189,8 @@ def main():
     test_loader = torch.utils.data.DataLoader(dataset2, **test_kwargs)
 
     model = Net().to(device)
-    model = torch.compile(model, backend="inductor")
+    #model = torch.compile(model, backend="inductor")
+    model = aot_module(model,fw_compiler=inspect_backend,bw_compiler=inspect_backend)
     optimizer = optim.Adadelta(model.parameters(), lr=args.lr)
 
     scheduler = StepLR(optimizer, step_size=1, gamma=args.gamma)
