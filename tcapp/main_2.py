@@ -8,9 +8,7 @@ from torch._functorch.aot_autograd import aot_module_simplified
 from torchvision import datasets, transforms
 from torch.optim.lr_scheduler import StepLR
 from torch.fx.passes.graph_drawer import FxGraphDrawer
-import habana_frameworks.torch.core as htcore
 from torch._decomp import core_aten_decompositions
-import habana_frameworks.torch.utils.debug as htdebug
 
 
 

@@ -1,17 +1,14 @@
 version: '3.8'
 
 services:
-  llamas:
+  tc-analysis:
     image: ytang-tc
     container_name: ytang-tc-container
     build:
          context: .
-         dockerfile: Dockerfile.gaudi
-         args:
-          HTTP_PROXY: http://proxy1-jf.intel.com:911
-          HTTPS_PROXY: http://proxy1-jf.intel.com:912
+         dockerfile: Dockerfile.gpu
     environment:
-      - HABANA_VISIBLE_DEVICES=all
+      - NVIDIA_VISIBLE_DEVICES=all
       - OMPI_MCA_btl_vader_single_copy_mechanism=none
     cap_add:
       - SYS_NICE
