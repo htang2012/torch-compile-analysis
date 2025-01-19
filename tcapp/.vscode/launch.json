@@ -16,7 +16,7 @@
                 "TORCH_COMPILE_DEBUG":"1",
                 "INDUCTOR_POST_FUSION_SVG":"1",
                 "TORCH_LOGS":"+inductor,dynamo",
-                "TORCHINDUCTOR_FORCE_DISABLE_CACHES":"1"
+                //"TORCHINDUCTOR_FORCE_DISABLE_CACHES":"1"
 
             }
 
